@@ -3,12 +3,23 @@
 
 #include <LedControl.h> // https://github.com/wayoda/LedControl
 #include <SD.h>
+#include <string.h>
 
 int size = 8;
 int side = size * 8;
 
 File arquivo;
 String linha;
+
+int frame1;
+int frame2;
+
+int x;
+int y;
+
+int counter;
+
+char *sp;
 
 // DIN, CLK, CS
 LedControl ledControls[] = {
@@ -31,9 +42,28 @@ void loop() {
     while(arquivo.available()){
       linha = arquivo.readStringUntil('\n');
 
+      sp = strtok(linha, ",");
+      frame1 = atoi(sp);
+
+      while(frame1 == frame2){
+
+        sp = strtok(linha, ",");
+        frame2 = atoi(sp);
+
+        sp = strtok(NULL, ",");
+        x = atoi(sp);
+
+        sp = strtok(NULL, ",");
+        y = atoi(sp);
+
+        ledControls[counter].setLed(counter, x, y, true);
+
+      }
+       counter +=1;
+
     }
 
   }else{
 
   }
-}
+}     
